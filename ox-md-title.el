@@ -1,5 +1,7 @@
 ;;; ox-md-title.el --- Document titles for ox-md.el
 
+;; Package-Requires: (ox-extend)
+
 ;;; Commentary:
 
 ;; ox-md-title.el is an ox-extension to add document titles to
