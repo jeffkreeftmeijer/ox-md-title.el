@@ -1,3 +1,12 @@
+;;; ox-md-title.el --- Document titles for ox-md.el
+
+;;; Commentary:
+
+;; ox-md-title.el is an ox-extension to add document titles to
+;; markdown files generated with ox-md and derivatives.
+
+;;; Code:
+
 (require 'ox-extend)
 
 (defun ox-md-title--advise-template (orig-fun &rest args)
@@ -21,3 +30,5 @@
                                             :remove ox-md-title-remove))
 
 (provide 'ox-md-title)
+
+;;; ox-md-title.el ends here
