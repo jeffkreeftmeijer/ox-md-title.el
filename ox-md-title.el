@@ -9,7 +9,7 @@
 
 (require 'ox-md)
 
-(defun ox-md-title--advise-template (orig-fun &rest args)
+(defun org-md-title--advise-template (orig-fun &rest args)
   (let ((info (nth 1 args)))
     (let ((style (plist-get info :md-headline-style))
           (title (org-export-data (plist-get info :title) info)))
@@ -17,13 +17,13 @@
        (org-md--headline-title (plist-get info :md-headline-style) 1 (org-export-data (plist-get info :title) info) nil)
        (apply orig-fun args)))))
 
-(defun ox-md-title-add ()
+(defun org-md-title-add ()
   (setq org-md-toplevel-hlevel 2)
-  (advice-add 'org-md-template :around #'ox-md-title--advise-template))
+  (advice-add 'org-md-template :around #'org-md-title--advise-template))
 
-(defun ox-md-title-remove ()
+(defun org-md-title-remove ()
   (setq org-md-toplevel-hlevel 1)
-  (advice-remove 'org-md-template #'ox-md-title--advise-template))
+  (advice-remove 'org-md-template #'org-md-title--advise-template))
 
 (provide 'ox-md-title)
 
