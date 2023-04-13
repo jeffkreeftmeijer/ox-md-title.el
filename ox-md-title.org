@@ -2,6 +2,9 @@
 #+author: Jeff Kreeftmeijer
 #+date: 2023-03-10
 
+Ox-md-title.el adds document titles to markdown files generated with ox-md and derivatives.
+It consists of a single advice, which is added around the =org-md-template= function to prepend the document title:
+
 #+headers: :tangle ox-md-title.el
 #+headers: :exports none
 #+begin_src emacs-lisp
