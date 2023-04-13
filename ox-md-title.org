@@ -43,3 +43,18 @@
 #+begin_src emacs-lisp
   ;;; ox-md-title.el ends here
 #+end_src
+
+* Usage
+
+Call =org-md-title-add= to add ox-md-title's advice before exporting[fn:gfm], and call =org-md-title-remove= after:
+
+#+begin_src emacs-lisp
+  (use-package ox-gfm)
+  (require 'ox-md-title)
+
+  (org-md-title-add)
+  (org-gfm-export-to-markdown)
+  (org-md-title-remove)
+#+end_src
+
+[fn:gfm] This example uses [[https://github.com/larstvei/ox-gfm][ox-gfm]], which works because it's a backend derived from ox-md.
