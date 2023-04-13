@@ -5,7 +5,11 @@
   (org-md-title-add)
   (find-file "ox-md-title.org")
   (org-md-export-as-markdown)
-  (should (string-match-p
-           "# ox-md-title"
-           (with-current-buffer "*Org MD Export*" (buffer-string))))
+
+  (let ((buffer (with-current-buffer
+		    "*Org MD Export*"
+		  (buffer-string))))
+
+    (should (string-match-p "# ox-md-title" buffer))
+    (should (string-match-p "## Usage" buffer)))
   (org-md-title-remove))
