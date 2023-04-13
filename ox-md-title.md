@@ -1,8 +1,6 @@
 
 # ox-md-title: Document titles for ox-md.el
 
-- [Usage](#org71671ec)
-
 Ox-md-title.el adds document titles to markdown files generated with ox-md and derivatives. It consists of a single advice, which is added around the `org-md-template` function to prepend the document title:
 
 ```emacs-lisp
@@ -25,8 +23,6 @@ Ox-md-title.el adds document titles to markdown files generated with ox-md and d
 (provide 'ox-md-title)
 ```
 
-
-<a id="org71671ec"></a>
 
 ## Usage
 
