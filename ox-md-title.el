@@ -14,7 +14,7 @@
          (style (plist-get info :md-headline-style))
          (title (org-export-data (plist-get info :title) info)))
     (concat
-     (org-md--headline-title (plist-get info :md-headline-style) 1 (org-export-data (plist-get info :title) info) nil)
+     (org-md--headline-title style 1 title nil)
      (apply orig-fun args))))
 
 (defun org-md-title-add ()
