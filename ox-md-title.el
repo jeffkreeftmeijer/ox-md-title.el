@@ -10,12 +10,12 @@
 (require 'ox-md)
 
 (defun org-md-title--advise-template (orig-fun &rest args)
-  (let ((info (nth 1 args)))
-    (let ((style (plist-get info :md-headline-style))
-          (title (org-export-data (plist-get info :title) info)))
-      (concat
-       (org-md--headline-title (plist-get info :md-headline-style) 1 (org-export-data (plist-get info :title) info) nil)
-       (apply orig-fun args)))))
+  (let* ((info (nth 1 args))
+         (style (plist-get info :md-headline-style))
+         (title (org-export-data (plist-get info :title) info)))
+    (concat
+     (org-md--headline-title (plist-get info :md-headline-style) 1 (org-export-data (plist-get info :title) info) nil)
+     (apply orig-fun args))))
 
 (defun org-md-title-add ()
   (setq org-md-toplevel-hlevel 2)
