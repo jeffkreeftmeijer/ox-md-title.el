@@ -10,6 +10,6 @@
 		    "*Org MD Export*"
 		  (buffer-string))))
 
-    (should (string-match-p "# ox-md-title" buffer))
-    (should (string-match-p "## Usage" buffer)))
+    (should (string-match-p "^# ox-md-title" buffer))
+    (should (string-match-p "^## Usage" buffer)))
   (org-md-title-remove))
