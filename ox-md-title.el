@@ -17,12 +17,12 @@
      (org-md--headline-title style 1 title nil)
      (apply orig-fun args))))
 
-(defun org-md-title--advise-headline (orig-fun &rest args)
+(defun org-md-title--advise-headline (args)
   (setf (nth 1 args) (+ (nth 1 args) 1))
-  (apply orig-fun args))
+  args)
 
 (defun org-md-title-add ()
-  (advice-add 'org-md--headline-title :around #'org-md-title--advise-headline)
+  (advice-add 'org-md--headline-title :filter-args #'org-md-title--advise-headline)
   (advice-add 'org-md-template :around #'org-md-title--advise-template))
 
 (defun org-md-title-remove ()
