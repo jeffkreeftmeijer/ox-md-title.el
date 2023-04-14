@@ -1,0 +1,22 @@
+name: Markdown
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: purcell/setup-emacs@master
+        with:
+          version: 28.2
+      - run: emacs --batch ox-md-title.org --load scripts/generate-markdown.el --funcall ox-md-title/as-markdown > README.md
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Regenerate ox-html-stable-ids.md
