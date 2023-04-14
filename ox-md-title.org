@@ -99,6 +99,7 @@ Call =org-md-title-add= to add ox-md-title's advice before exporting[fn:gfm], an
 #+begin_src emacs-lisp
   (use-package ox-gfm)
   (require 'ox-md-title)
+  (org-md-title-add)
 
   (let ((org-md-title t))
     (org-gfm-export-to-markdown))
