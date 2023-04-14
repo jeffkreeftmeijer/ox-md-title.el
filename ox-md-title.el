@@ -9,16 +9,32 @@
 
 (require 'ox-md)
 
+(defgroup org-export-md-title nil
+  "Options for org-md-title."
+  :tag "Org Markdown Title"
+  :group 'org-export
+  :version "24.4"
+  :package-version '(Org . "8.0"))
+
+(defcustom org-md-title nil
+  "Non-nil means to include the title in the exported document."
+  :group 'org-export-md-title
+  :version "24.4"
+  :package-version '(Org . "8.0")
+  :type 'boolean)
+
 (defun org-md-title--advise-template (orig-fun &rest args)
-  (let* ((info (nth 1 args))
-         (style (plist-get info :md-headline-style))
-         (title (org-export-data (plist-get info :title) info)))
-    (concat
-     (org-md--headline-title style 0 title nil)
-     (apply orig-fun args))))
+  (concat
+   (when org-md-title
+     (let* ((info (nth 1 args))
+	    (style (plist-get info :md-headline-style))
+	    (title (org-export-data (plist-get info :title) info)))
+       (org-md--headline-title style 0 title nil)))
+   (apply orig-fun args)))
 
 (defun org-md-title--advise-headline (args)
-  (setf (nth 1 args) (+ (nth 1 args) 1))
+  (when org-md-title
+    (setf (nth 1 args) (+ (nth 1 args) 1)))
   args)
 
 (defun org-md-title-add ()
