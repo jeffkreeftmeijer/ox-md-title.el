@@ -4,9 +4,10 @@
 #+options: toc:nil
 
 Ox-md-title.el adds document titles to markdown files generated with ox-md and derivatives.
-It consists of a single advice, which is added around the =org-md-template= function to prepend the document title:
 
-#+name: advice
+It's disabled by default, unless the =org-export-md-title= option is non-nil:
+
+#+name: option
 #+begin_src emacs-lisp
   (defgroup org-export-md-title nil
     "Options for org-md-title."
@@ -21,7 +22,14 @@ It consists of a single advice, which is added around the =org-md-template= func
     :version "24.4"
     :package-version '(Org . "8.0")
     :type 'boolean)
+#+end_src
 
+The package works by advising two functions.
+First, it advises =org-md-template= by prepending the document title.
+The title is built by calling out to =org-md--headline-title=[fn:org-md-headline] with the headline style and title extracted from the =info= variable:
+
+#+name: template
+#+begin_src emacs-lisp
   (defun org-md-title--advise-template (orig-fun &rest args)
     (concat
      (when org-md-title
@@ -30,12 +38,23 @@ It consists of a single advice, which is added around the =org-md-template= func
 	      (title (org-export-data (plist-get info :title) info)))
 	 (org-md--headline-title style 0 title nil)))
      (apply orig-fun args)))
+#+end_src
 
+Because a new title is prepended to the document, any already-existing headlines need their levels bumped up.
+The second advice intercepts calls to =org-md--headline-title= and increments the second parameter before calling the original function:
+
+#+name: headline
+#+begin_src emacs-lisp
   (defun org-md-title--advise-headline (args)
     (when org-md-title
       (setf (nth 1 args) (+ (nth 1 args) 1)))
     args)
+#+end_src
 
+Finally, the added functions are added as advice:
+
+#+name: advice
+#+begin_src emacs-lisp
   (defun org-md-title-add ()
     (advice-add 'org-md--headline-title :filter-args #'org-md-title--advise-headline)
     (advice-add 'org-md-template :around #'org-md-title--advise-template))
@@ -60,6 +79,12 @@ It consists of a single advice, which is added around the =org-md-template= func
 
   (require 'ox-md)
 
+  <<option>>
+
+  <<template>>
+
+  <<headline>>
+
   <<advice>>
 
   (provide 'ox-md-title)
@@ -79,4 +104,5 @@ Call =org-md-title-add= to add ox-md-title's advice before exporting[fn:gfm], an
     (org-gfm-export-to-markdown))
 #+end_src
 
+[fn:org-md-headline] This package advises the private =org-md--headline-title= instead of =org-md-headline=, because the latter requires an actual Org headline element, which does not exist.
 [fn:gfm] This example uses [[https://github.com/larstvei/ox-gfm][ox-gfm]], which works because it's a backend derived from ox-md.
