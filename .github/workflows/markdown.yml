@@ -2,7 +2,7 @@ name: Markdown
 
 on:
   push:
-    branches: [ "main", "develop" ]
+    branches: [ "main", "develop", "generate-markdown" ]
 
 jobs:
   generate:
