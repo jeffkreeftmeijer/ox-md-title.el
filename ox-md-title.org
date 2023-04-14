@@ -96,16 +96,30 @@ Finally, the added functions are added as advice:
 
 * Usage
 
-Call =org-md-title-add= to add ox-md-title's advice before exporting[fn:gfm], and call =org-md-title-remove= after:
+Ox-md-title is currently not available through any of the package registries.
+Instead, install it from the repository direcly.
+Install the package with [[https://github.com/jwiegley/use-package][use-package]] and [[https://github.com/radian-software/straight.el][straight.el]], and enable it by calling =org-md-title-add=:
 
 #+begin_src emacs-lisp
-  (use-package ox-gfm)
+  (use-package ox-md-title
+    :straight
+    (ox-md-title :type git :host github :repo "jeffkreeftmeijer/ox-md-title.el")
+    :config
+    (org-md-title-add))
+#+end_src
+
+Alternatively, download =ox-md-title.el= and require it manually:
+
+#+begin_src emacs-lisp
   (require 'ox-md-title)
   (org-md-title-add)
+#+end_src
 
+After calling =org-md-title-add=, set thte =org-md-title= variable to add document titles when exporting with ox-md:
+
+#+begin_src emacs-lisp
   (let ((org-md-title t))
-    (org-gfm-export-to-markdown))
+    (org-markdown-export-to-markdown))
 #+end_src
 
 [fn:org-md-headline] This package advises the private =org-md--headline-title= instead of =org-md-headline=, because the latter requires an actual Org headline element, which does not exist.
-[fn:gfm] This example uses [[https://github.com/larstvei/ox-gfm][ox-gfm]], which works because it's a backend derived from ox-md.
