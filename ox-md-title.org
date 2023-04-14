@@ -6,22 +6,7 @@
 Ox-md-title.el adds document titles to markdown files generated with ox-md and derivatives.
 It consists of a single advice, which is added around the =org-md-template= function to prepend the document title:
 
-#+headers: :tangle ox-md-title.el
-#+headers: :exports none
-#+begin_src emacs-lisp
-  ;;; ox-md-title.el --- Document titles for ox-md.el
-
-  ;;; Commentary:
-
-  ;; ox-md-title.el adds document titles to markdown files generated
-  ;; with ox-md and derivatives.
-
-  ;;; Code:
-
-  (require 'ox-md)
-#+end_src
-
-#+headers: :tangle ox-md-title.el
+#+name: advice
 #+begin_src emacs-lisp
   (defun org-md-title--advise-template (orig-fun &rest args)
     (let* ((info (nth 1 args))
@@ -42,13 +27,27 @@ It consists of a single advice, which is added around the =org-md-template= func
   (defun org-md-title-remove ()
     (advice-remove 'org-md--headline-title #'org-md-title--advise-headline)
     (advice-remove 'org-md-template #'org-md-title--advise-template))
-
-  (provide 'ox-md-title)
 #+end_src
 
 #+headers: :tangle ox-md-title.el
+#+headers: :noweb yes
 #+headers: :exports none
 #+begin_src emacs-lisp
+  ;;; ox-md-title.el --- Document titles for ox-md.el
+
+  ;;; Commentary:
+
+  ;; ox-md-title.el adds document titles to markdown files generated
+  ;; with ox-md and derivatives.
+
+  ;;; Code:
+
+  (require 'ox-md)
+
+  <<advice>>
+
+  (provide 'ox-md-title)
+
   ;;; ox-md-title.el ends here
 #+end_src
 
