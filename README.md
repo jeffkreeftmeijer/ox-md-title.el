@@ -1,9 +1,9 @@
 
 # ox-md-title: Document titles for ox-md.el
 
-Ox-md-title.el adds document titles to markdown files generated with ox-md and derivatives.
+[Ox-md-title.el](https://github.com/jeffkreeftmeijer/ox-md-title.el) adds document titles to markdown files generated with ox-md and derivatives.
 
-It's disabled by default, unless the `org-export-md-title` option is non-nil:
+Ox-md-title is disabled by default, even after requiring and enabling the library. It only adds titles to Markdown export when `org-md-title` is non-nil:
 
 ```emacs-lisp
 (defgroup org-export-md-title nil
