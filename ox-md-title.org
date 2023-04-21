@@ -97,7 +97,7 @@ It only adds titles to Markdown export when =org-md-title= is non-nil:
 
 The package works by advising two functions.
 First, it advises =org-md-template= by prepending the document title.
-The title is built by calling out to =org-md--headline-title=[fn:org-md-headline] with the headline style and title extracted from the =info= variable:
+The title is built by calling out to =org-md--headline-title= with the headline style and title extracted from the =info= variable:
 
 #+name: template
 #+begin_src emacs-lisp
@@ -113,33 +113,30 @@ The title is built by calling out to =org-md--headline-title=[fn:org-md-headline
 #+end_src
 
 Because a new title is prepended to the document, any already-existing headlines need their levels bumped up.
-The second advice intercepts calls to =org-md--headline-title= and increments the second parameter before calling the original function:
+The second advice intercepts calls to =org-md-headline=.
+It increments the headline level by one if =org-md-title= is enabled and if the current document has a title set before calling the original function:
 
 #+name: headline
 #+begin_src emacs-lisp
-  (defun org-md-title--advise-headline (args)
-    (when (and org-md-title (plist-get (nth 1 args) :title))
-      (setf (nth 1 args) (+ (nth 1 args) 1)))
-    args)
-
-  (defun org-md-title--advise-export (orig-fun &rest args)
-    (let ((org-md-toplevel-hlevel (if org-md-title 2 1)))
-      (apply orig-fun args)))
+  (defun org-md-title--advise-headline (orig-fun headline contents info)
+    (let* ((level (plist-get info :md-toplevel-hlevel))
+	   (level (if (and org-md-title
+			   (plist-get info :title))
+		      (+ level 1)
+		    level)))
+      (apply orig-fun (list headline contents (plist-put info :md-toplevel-hlevel level)))))
 #+end_src
-
-#+RESULTS: headline
-: org-md-title--advise-headline
 
 Finally, the added functions are added as advice:
 
 #+name: advice
 #+begin_src emacs-lisp
   (defun org-md-title-add ()
-    (advice-add 'org-md-export-as-markdown :around #'org-md-title--advise-export)
+    (advice-add 'org-md-headline :around #'org-md-title--advise-headline)
     (advice-add 'org-md-template :around #'org-md-title--advise-template))
 
   (defun org-md-title-remove ()
-    (advice-remove 'org-md-export-as-markdown #'org-md-title--advise-export)
+    (advice-remove 'org-md-headline #'org-md-title--advise-headline)
     (advice-remove 'org-md-template #'org-md-title--advise-template))
 #+end_src
 
@@ -207,5 +204,3 @@ The point of "md" export back-end is not to provide the same features as full-fl
 I wrote it to take care of the boring stuff of markdown syntax.
 Anyone willing to write a back-end with a different Markdown flavour just needs to concentrate of the differences between the original syntax.
 #+end_quote
-
-[fn:org-md-headline] This package advises the private =org-md--headline-title= instead of =org-md-headline=, because the latter requires an actual Org headline element, which does not exist.
