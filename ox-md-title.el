@@ -28,9 +28,13 @@
    (when org-md-title
      (let* ((info (nth 1 args))
 	    (style (plist-get info :md-headline-style))
-	    (title (plist-get info :title)))
-       (when title
-	 (org-md--headline-title style 1 (org-export-data title info) nil))))
+	    (title (plist-get info :title))
+	    (subtitle (org-export-data (plist-get info :subtitle) info)))
+       (concat
+	(when title
+	  (org-md--headline-title style 1 (org-export-data title info) nil))
+	(when subtitle
+	  (org-md--headline-title style 2 (org-export-data subtitle info) nil)))))
    (apply orig-fun args)))
 
 (defun org-md-title--advise-level (orig-fun headline info)
