@@ -7,7 +7,7 @@
 
 * Introduction
 
-Org documents often have their document titles set in a src_org[:exports code]{+#title:} export setting at the start of the file.
+Org documents often have their document titles set in a src_org[:exports code]{+#title} export setting at the start of the file.
 The title is used when exporting to other formats.
 For example, when exporting to HTML, the title is used in the resulting document's src_html[:exports code]{<title>} and src_html[:exports code]{<h1>} tags.
 
@@ -21,7 +21,7 @@ Instead, it's common to add a top-level headline to the start of the document:
 #+end_src
 
 [[https://git.savannah.gnu.org/cgit/emacs/org-mode.git/tree/lisp/ox-md.el][Ox-md]], the Markdown exporter shipped with Org mode, adheres to Markdown's lack of explicit titles.[fn:patch]
-Even though Org documents can have titles through the src_org[:exports code]{+#title:} export setting, ox-md produces Markdown files with the titles omitted.
+Even though Org documents can have titles through the title export setting, ox-md produces Markdown files with the titles omitted.
 For example, the current document has export settings, including a title:
 
 #+include: "ox-md-title.org" src org :lines "1-7"
