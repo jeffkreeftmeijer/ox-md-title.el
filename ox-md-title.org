@@ -3,8 +3,77 @@
 #+date: 2023-03-10
 #+options: toc:nil
 
-[[https://github.com/jeffkreeftmeijer/ox-md-title.el][Ox-md-title.el]] adds document titles to markdown files generated with ox-md and derivatives.
+[[https://github.com/jeffkreeftmeijer/ox-md-title.el][Ox-md-title.el]] adds document titles to Markdown files generated with ox-md and derivatives.
 
+* Introduction
+
+Org documents often have their document titles set in a src_org[:exports code]{+#title} export setting at the start of the file.
+The title is used when exporting to other formats.
+For example, when exporting to HTML, the title is used in the resulting document's src_html[:exports code]{<title>} and src_html[:exports code]{<h1>} tags.
+
+Markdown doesn't have an equivalent to Org's titles.
+Instead, it's common to add a top-level headline to the start of the document.
+
+[[https://git.savannah.gnu.org/cgit/emacs/org-mode.git/tree/lisp/ox-md.el][Ox-md]], the Markdown exporter shipped with Org mode, adheres to Markdown's lack of explicit titles.[fn:patch]
+Even though Org documents can have titles through the title export setting, ox-md produces Markdown files with the titles omitted.
+For example, the current document has export settings, including a title:
+
+#+include: "ox-md-title.org" src org :lines "1-9"
+
+Exporting with =org-md-export-as-markdown= produces a Markdown document without a title headline:
+
+#+headers: :exports results
+#+headers: :wrap src markdown
+#+headers: :cache yes
+#+begin_src emacs-lisp
+  (find-file "ox-md-title.org")
+  (org-md-export-as-markdown)
+
+  (let ((contents (buffer-substring 1 163)))
+    (kill-buffer)
+    contents)
+#+end_src
+
+#+RESULTS[895dc372a4698a04047a1d2c27329f3c7e98078d]:
+#+begin_src markdown
+[Ox-md-title.el](https://github.com/jeffkreeftmeijer/ox-md-title.el) adds document titles to Markdown files generated with ox-md and derivatives.
+
+
+# Introduction
+#+end_src
+
+Ox-md-title deviates from the Markdown standard and adds document titles to behave like the other org exporters.
+Once enabled, it adds the document title in front of the exported document, and shifts the sub headlines one level down:
+
+#+headers: :exports results
+#+headers: :wrap src markdown
+#+headers: :cache yes
+#+begin_src emacs-lisp
+  (require 'ox-md-title)
+  (org-md-title-add)
+
+  (find-file "ox-md-title.org")
+
+  (let ((org-md-title t))
+    (org-md-export-as-markdown))
+
+  (let ((contents (buffer-substring 1 210)))
+    (kill-buffer)
+    contents)
+#+end_src
+
+#+RESULTS[aafde1d92af9a0c874e5e96444bc7817d50d061a]:
+#+begin_src markdown
+
+# ox-md-title: Document titles for ox-md.el
+
+[Ox-md-title.el](https://github.com/jeffkreeftmeijer/ox-md-title.el) adds document titles to Markdown files generated with ox-md and derivatives.
+
+
+## Introduction
+#+end_src
+
+* Implementation
 
 Ox-md-title is disabled by default, even after requiring and enabling the library.
 It only adds titles to Markdown export when =org-md-title= is non-nil:
@@ -106,6 +175,15 @@ Call =org-md-title-add= to add ox-md-title's advice before exporting[fn:gfm], an
   (let ((org-md-title t))
     (org-gfm-export-to-markdown))
 #+end_src
+
+[fn:patch] A [[https://lists.gnu.org/archive/html/emacs-orgmode/2017-08/msg00553.html][patch to add titles]] was rejected to keep ox-md compatible with standard Markdown.
+Instead of adding support for titles in the main implementation, it's suggested that features like this should be implemented in more specific backends:
+
+#+begin_quote
+The point of "md" export back-end is not to provide the same features as full-fledged ones like "latex" or "html".
+I wrote it to take care of the boring stuff of markdown syntax.
+Anyone willing to write a back-end with a different Markdown flavour just needs to concentrate of the differences between the original syntax.
+#+end_quote
 
 [fn:org-md-headline] This package advises the private =org-md--headline-title= instead of =org-md-headline=, because the latter requires an actual Org headline element, which does not exist.
 [fn:gfm] This example uses [[https://github.com/larstvei/ox-gfm][ox-gfm]], which works because it's a backend derived from ox-md.
