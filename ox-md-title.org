@@ -35,14 +35,17 @@ Exporting with =org-md-export-as-markdown= produces a Markdown document without 
   (find-file "ox-md-title.org")
   (org-md-export-as-markdown)
 
-  (let ((contents (buffer-substring 1 146)))
+  (let ((contents (buffer-substring 1 163)))
     (kill-buffer)
     contents)
 #+end_src
 
-#+RESULTS[bdca1232b792702a2b1996b528ca163226522ccc]:
+#+RESULTS[895dc372a4698a04047a1d2c27329f3c7e98078d]:
 #+begin_src markdown
 [Ox-md-title.el](https://github.com/jeffkreeftmeijer/ox-md-title.el) adds document titles to Markdown files generated with ox-md and derivatives.
+
+
+# Introduction
 #+end_src
 
 Ox-md-title deviates from the Markdown standard and adds document titles to behave like the other org exporters.
@@ -60,17 +63,20 @@ Once enabled, it adds the document title in front of the exported document, and 
   (let ((org-md-title t))
     (org-md-export-as-markdown))
 
-  (let ((contents (buffer-substring 1 192)))
+  (let ((contents (buffer-substring 1 210)))
     (kill-buffer)
     contents)
 #+end_src
 
-#+RESULTS[de3e457d6a2fb3f7a4cece1d828eda6463e800c2]:
+#+RESULTS[aafde1d92af9a0c874e5e96444bc7817d50d061a]:
 #+begin_src markdown
 
 # ox-md-title: Document titles for ox-md.el
 
-[Ox-md-title.el](https://github.com/jeffkreeftmeijer/ox-md-title.el) adds document titles to markdown files generated with ox-md and derivatives.
+[Ox-md-title.el](https://github.com/jeffkreeftmeijer/ox-md-title.el) adds document titles to Markdown files generated with ox-md and derivatives.
+
+
+## Introduction
 #+end_src
 
 * Implementation
