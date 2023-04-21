@@ -27,5 +27,5 @@
 		    "*Org MD Export*"
 		  (buffer-string))))
 
-    (should-not (string-match-p "# ox-md-title" buffer))
+    (should-not (string-match-p "^# ox-md-title" buffer))
     (should (string-match-p "^# Usage" buffer))))
