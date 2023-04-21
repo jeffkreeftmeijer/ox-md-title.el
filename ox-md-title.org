@@ -12,13 +12,7 @@ The title is used when exporting to other formats.
 For example, when exporting to HTML, the title is used in the resulting document's src_html[:exports code]{<title>} and src_html[:exports code]{<h1>} tags.
 
 Markdown doesn't have an equivalent to Org's titles.
-Instead, it's common to add a top-level headline to the start of the document:
-
-#+begin_src markdown
-  # ox-md-title: Document titles for ox-md.el
-
-  [Ox-md-title.el](https://github.com/jeffkreeftmeijer/ox-md-title.el) adds document titles to Markdown files generated with ox-md and derivatives.
-#+end_src
+Instead, it's common to add a top-level headline to the start of the document.
 
 [[https://git.savannah.gnu.org/cgit/emacs/org-mode.git/tree/lisp/ox-md.el][Ox-md]], the Markdown exporter shipped with Org mode, adheres to Markdown's lack of explicit titles.[fn:patch]
 Even though Org documents can have titles through the title export setting, ox-md produces Markdown files with the titles omitted.
