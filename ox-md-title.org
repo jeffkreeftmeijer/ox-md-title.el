@@ -148,5 +148,14 @@ Call =org-md-title-add= to add ox-md-title's advice before exporting[fn:gfm], an
     (org-gfm-export-to-markdown))
 #+end_src
 
+[fn:patch] A [[https://lists.gnu.org/archive/html/emacs-orgmode/2017-08/msg00553.html][patch to add titles]] was rejected to keep ox-md compatible with standard Markdown.
+Instead of adding support for titles in the main implementation, it's suggested that features like this should be implemented in more specific backends:
+
+#+begin_quote
+The point of "md" export back-end is not to provide the same features as full-fledged ones like "latex" or "html".
+I wrote it to take care of the boring stuff of markdown syntax.
+Anyone willing to write a back-end with a different Markdown flavour just needs to concentrate of the differences between the original syntax.
+#+end_quote
+
 [fn:org-md-headline] This package advises the private =org-md--headline-title= instead of =org-md-headline=, because the latter requires an actual Org headline element, which does not exist.
 [fn:gfm] This example uses [[https://github.com/larstvei/ox-gfm][ox-gfm]], which works because it's a backend derived from ox-md.
