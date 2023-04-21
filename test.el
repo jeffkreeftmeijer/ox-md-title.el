@@ -7,7 +7,10 @@
   (org-md-title-remove))
 
 (ert-deftest title-test ()
-  (find-file "ox-md-title.org")
+  (switch-to-buffer "*ox-md-title-test*")
+  (erase-buffer)
+  (insert "#+title: Title\n\n* Sub-headline")
+
   (let ((org-md-title t))
     (with-org-md-title #'org-md-export-as-markdown))
 
@@ -15,11 +18,14 @@
 		    "*Org MD Export*"
 		  (buffer-string))))
 
-    (should (string-match-p "^# ox-md-title" buffer))
-    (should (string-match-p "^## Usage" buffer))))
+    (should (string-match-p "^# Title" buffer))
+    (should (string-match-p "^## Sub-headline" buffer))))
 
 (ert-deftest title-disabled-test ()
-  (find-file "ox-md-title.org")
+  (switch-to-buffer "*ox-md-title-test*")
+  (erase-buffer)
+  (insert "#+title: Title\n\n* Sub-headline")
+
   (let ((org-md-title nil))
     (with-org-md-title #'org-md-export-as-markdown))
 
@@ -27,5 +33,5 @@
 		    "*Org MD Export*"
 		  (buffer-string))))
 
-    (should-not (string-match-p "^# ox-md-title" buffer))
-    (should (string-match-p "^# Usage" buffer))))
+    (should-not (string-match-p "# Title" buffer))
+    (should (string-match-p "^# Sub-headline" buffer))))
