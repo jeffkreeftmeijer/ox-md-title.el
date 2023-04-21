@@ -26,7 +26,7 @@ For example, the current document has export settings, including a title:
 
 #+include: "ox-md-title.org" src org :lines "1-7"
 
-Exporting to markdown with =org-md-export-as-markdown= produces a document without a title headline:
+Exporting with =org-md-export-as-markdown= produces a Markdown document without a title headline:
 
 #+headers: :exports results
 #+headers: :wrap src markdown
@@ -42,6 +42,34 @@ Exporting to markdown with =org-md-export-as-markdown= produces a document witho
 
 #+RESULTS[bdca1232b792702a2b1996b528ca163226522ccc]:
 #+begin_src markdown
+[Ox-md-title.el](https://github.com/jeffkreeftmeijer/ox-md-title.el) adds document titles to Markdown files generated with ox-md and derivatives.
+#+end_src
+
+Ox-md-title deviates from the Markdown standard and adds document titles to behave like the other org exporters.
+Once enabled, it adds the document title in front of the exported document, and shifts the sub headlines one level down:
+
+#+headers: :exports results
+#+headers: :wrap src markdown
+#+headers: :cache yes
+#+begin_src emacs-lisp
+  (require 'ox-md-title)
+  (org-md-title-add)
+
+  (find-file "ox-md-title.org")
+
+  (let ((org-md-title t))
+    (org-md-export-as-markdown))
+
+  (let ((contents (buffer-substring 1 192)))
+    (kill-buffer)
+    contents)
+#+end_src
+
+#+RESULTS[de3e457d6a2fb3f7a4cece1d828eda6463e800c2]:
+#+begin_src markdown
+
+# ox-md-title: Document titles for ox-md.el
+
 [Ox-md-title.el](https://github.com/jeffkreeftmeijer/ox-md-title.el) adds document titles to markdown files generated with ox-md and derivatives.
 #+end_src
 
