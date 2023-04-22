@@ -33,20 +33,18 @@
 	 (org-md--headline-title style 1 (org-export-data title info) nil))))
    (apply orig-fun args)))
 
-(defun org-md-title--advise-headline (orig-fun headline contents info)
-  (let* ((level (plist-get info :md-toplevel-hlevel))
-	 (level (if (and org-md-title
-			 (plist-get info :title))
-		    (+ level 1)
-		  level)))
-    (apply orig-fun (list headline contents (plist-put info :md-toplevel-hlevel level)))))
+(defun org-md-title--advise-level (orig-fun headline info)
+  (+ (funcall orig-fun headline info)
+     (if (and org-md-title (plist-get info :title))
+	 1
+       0)))
 
 (defun org-md-title-add ()
-  (advice-add 'org-md-headline :around #'org-md-title--advise-headline)
+  (advice-add 'org-export-get-relative-level :around #'org-md-title--advise-level)
   (advice-add 'org-md-template :around #'org-md-title--advise-template))
 
 (defun org-md-title-remove ()
-  (advice-remove 'org-md-headline #'org-md-title--advise-headline)
+  (advice-remove 'org-export-get-relative-level #'org-md-title--advise-level)
   (advice-remove 'org-md-template #'org-md-title--advise-template))
 
 (provide 'ox-md-title)
