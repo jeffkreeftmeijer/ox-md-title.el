@@ -49,6 +49,7 @@
 		  (buffer-string))))
 
     (should-not (string-match-p "^# \n" buffer))
+    (should-not (string-match-p "^## \n" buffer))
     (should (string-match-p "^# Sub-headline\n" buffer))))
 
 (ert-deftest title-disabled-test ()
