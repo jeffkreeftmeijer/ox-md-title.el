@@ -65,7 +65,7 @@ Ox-md-title is disabled by default, even after requiring and enabling the librar
   :type 'boolean)
 ```
 
-The package works by advising two functions. First, it advises `org-md-template` by prepending the document title. The title is built by calling out to `org-md--headline-title`<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup> with the headline style and title extracted from the `info` variable:
+The package works by advising two functions. First, it advises `org-md-template` by prepending the document title. The title is built by calling out to `org-md--headline-title` with the headline style and title extracted from the `info` variable:
 
 ```emacs-lisp
 (defun org-md-title--advise-template (orig-fun &rest args)
@@ -75,28 +75,29 @@ The package works by advising two functions. First, it advises `org-md-template`
 	    (style (plist-get info :md-headline-style))
 	    (title (plist-get info :title)))
        (when title
-	 (org-md--headline-title style 0 (org-export-data title info) nil))))
+	 (org-md--headline-title style 1 (org-export-data title info) nil))))
    (apply orig-fun args)))
 ```
 
-Because a new title is prepended to the document, any already-existing headlines need their levels bumped up. The second advice intercepts calls to `org-md--headline-title` and increments the second parameter before calling the original function:
+Because a new title is prepended to the document, any already-existing headlines need their levels bumped up. The second advice intercepts calls to `org-export-get-relative-level`, which is the internal function the export backends use to determine the level for the current headline. It increments the headline level by one if `org-md-title` is enabled and if the current document has a title set:
 
 ```emacs-lisp
-(defun org-md-title--advise-headline (args)
-  (when org-md-title
-    (setf (nth 1 args) (+ (nth 1 args) 1)))
-  args)
+(defun org-md-title--advise-level (orig-fun headline info)
+  (+ (funcall orig-fun headline info)
+     (if (and org-md-title (plist-get info :title))
+	 1
+       0)))
 ```
 
 Finally, the added functions are added as advice:
 
 ```emacs-lisp
 (defun org-md-title-add ()
-  (advice-add 'org-md--headline-title :filter-args #'org-md-title--advise-headline)
+  (advice-add 'org-export-get-relative-level :around #'org-md-title--advise-level)
   (advice-add 'org-md-template :around #'org-md-title--advise-template))
 
 (defun org-md-title-remove ()
-  (advice-remove 'org-md--headline-title #'org-md-title--advise-headline)
+  (advice-remove 'org-export-get-relative-level #'org-md-title--advise-level)
   (advice-remove 'org-md-template #'org-md-title--advise-template))
 ```
 
@@ -132,5 +133,3 @@ After calling `org-md-title-add`, set thte `org-md-title` variable to add docume
 <sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> A [patch to add titles](https://lists.gnu.org/archive/html/emacs-orgmode/2017-08/msg00553.html) was rejected to keep ox-md compatible with standard Markdown. Instead of adding support for titles in the main implementation, it's suggested that features like this should be implemented in more specific backends:
 
 > The point of "md" export back-end is not to provide the same features as full-fledged ones like "latex" or "html". I wrote it to take care of the boring stuff of markdown syntax. Anyone willing to write a back-end with a different Markdown flavour just needs to concentrate of the differences between the original syntax.
-
-<sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> This package advises the private `org-md--headline-title` instead of `org-md-headline`, because the latter requires an actual Org headline element, which does not exist.
