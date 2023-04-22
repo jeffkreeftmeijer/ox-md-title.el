@@ -1,6 +1,9 @@
 
 # ox-md-title: Document titles for ox-md.el
 
+
+## 
+
 [Ox-md-title.el](https://github.com/jeffkreeftmeijer/ox-md-title.el) adds document titles to Markdown files generated with ox-md and derivatives.
 
 
@@ -73,9 +76,13 @@ The package works by advising two functions. First, it advises `org-md-template`
    (when org-md-title
      (let* ((info (nth 1 args))
 	    (style (plist-get info :md-headline-style))
-	    (title (plist-get info :title)))
-       (when title
-	 (org-md--headline-title style 1 (org-export-data title info) nil))))
+	    (title (plist-get info :title))
+	    (subtitle (org-export-data (plist-get info :subtitle) info)))
+       (concat
+	(when title
+	  (org-md--headline-title style 1 (org-export-data title info) nil))
+	(when subtitle
+	  (org-md--headline-title style 2 (org-export-data subtitle info) nil)))))
    (apply orig-fun args)))
 ```
 
