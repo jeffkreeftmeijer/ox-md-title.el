@@ -69,18 +69,16 @@ The package works by advising two functions. First, it advises `org-md-template`
 
 ```emacs-lisp
 (defun org-md-title--advise-template (orig-fun &rest args)
-  (concat
-   (when org-md-title
-     (let* ((info (nth 1 args))
-	    (style (plist-get info :md-headline-style))
-	    (title (plist-get info :title))
-	    (subtitle (plist-get info :subtitle)))
-       (concat
-	(when title
-	  (org-md--headline-title style 1 (org-export-data title info) nil))
-	(when subtitle
-	  (org-md--headline-title style 2 (org-export-data subtitle info) nil)))))
-   (apply orig-fun args)))
+  (let* ((info (nth 1 args))
+	 (style (plist-get info :md-headline-style))
+	 (title (plist-get info :title))
+	 (subtitle (plist-get info :subtitle)))
+    (concat
+     (when (and org-md-title title)
+       (org-md--headline-title style 1 (org-export-data title info) nil))
+     (when (and org-md-title subtitle)
+       (org-md--headline-title style 2 (org-export-data subtitle info) nil))
+     (apply orig-fun args))))
 ```
 
 Because a new title is prepended to the document, any already-existing headlines need their levels bumped up. The second advice intercepts calls to `org-export-get-relative-level`, which is the internal function the export backends use to determine the level for the current headline. It increments the headline level by one if `org-md-title` is enabled and if the current document has a title set:
