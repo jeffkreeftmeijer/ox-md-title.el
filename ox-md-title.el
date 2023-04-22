@@ -24,18 +24,16 @@
   :type 'boolean)
 
 (defun org-md-title--advise-template (orig-fun &rest args)
-  (concat
-   (when org-md-title
-     (let* ((info (nth 1 args))
-	    (style (plist-get info :md-headline-style))
-	    (title (plist-get info :title))
-	    (subtitle (plist-get info :subtitle)))
-       (concat
-	(when title
-	  (org-md--headline-title style 1 (org-export-data title info) nil))
-	(when subtitle
-	  (org-md--headline-title style 2 (org-export-data subtitle info) nil)))))
-   (apply orig-fun args)))
+  (let* ((info (nth 1 args))
+	 (style (plist-get info :md-headline-style))
+	 (title (plist-get info :title))
+	 (subtitle (plist-get info :subtitle)))
+    (concat
+     (when (and org-md-title title)
+       (org-md--headline-title style 1 (org-export-data title info) nil))
+     (when (and org-md-title subtitle)
+       (org-md--headline-title style 2 (org-export-data subtitle info) nil))
+     (apply orig-fun args))))
 
 (defun org-md-title--advise-level (orig-fun headline info)
   (+ (funcall orig-fun headline info)
