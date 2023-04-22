@@ -29,7 +29,7 @@
      (let* ((info (nth 1 args))
 	    (style (plist-get info :md-headline-style))
 	    (title (plist-get info :title))
-	    (subtitle (org-export-data (plist-get info :subtitle) info)))
+	    (subtitle (plist-get info :subtitle)))
        (concat
 	(when title
 	  (org-md--headline-title style 1 (org-export-data title info) nil))
