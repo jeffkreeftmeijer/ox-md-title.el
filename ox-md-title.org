@@ -1,3 +1,6 @@
+:PROPERTIES:
+:ID:       0EB3C746-C15C-498D-A759-B654CEBE9598
+:END:
 #+title: ox-md-title: Document titles for ox-md.el
 #+author: Jeff Kreeftmeijer
 #+date: 2023-04-24
