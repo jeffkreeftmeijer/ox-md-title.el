@@ -15,7 +15,7 @@ Markdown doesn't have an equivalent to Org's titles. Instead, it's common to add
 ```org
 #+title: ox-md-title: Document titles for ox-md.el
 #+author: Jeff Kreeftmeijer
-#+date: 2023-03-10
+#+date: 2023-04-24
 #+options: toc:nil
 
 [[https://github.com/jeffkreeftmeijer/ox-md-title.el][Ox-md-title.el]] adds document titles to Markdown files generated with ox-md and derivatives.
