@@ -21,7 +21,7 @@ Instead, it's common to add a top-level headline to the start of the document.
 Even though Org documents can have titles through the title export setting, ox-md produces Markdown files with the titles omitted.
 For example, the current document has export settings, including a title:
 
-#+include: "ox-md-title.org" src org :lines "1-9"
+#+include: "ox-md-title.org" src org :lines "4-13"
 
 Exporting with =org-md-export-as-markdown= produces a Markdown document without a title headline:
 
