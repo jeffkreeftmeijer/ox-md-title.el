@@ -1,5 +1,9 @@
 ;;; ox-md-title.el --- Document titles for ox-md.el
 
+;; Author: Jeff Kreeftmeijer <jeff@kreeft.me>
+;; Version: 0.1
+;; URL: https://jeffkreeftmeijer.com/ox-md-title
+
 ;;; Commentary:
 
 ;; ox-md-title.el adds document titles to markdown files generated
