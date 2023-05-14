@@ -175,7 +175,7 @@ Finally, the added functions are added as advice:
   ;;; ox-md-title.el ends here
 #+end_src
 
-* Usage
+* Installation and usage
 
 Ox-md-title is currently not available through any of the package registries.
 Instead, install it from the repository direcly.
