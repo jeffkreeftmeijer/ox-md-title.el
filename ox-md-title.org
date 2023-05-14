@@ -211,3 +211,45 @@ The point of "md" export back-end is not to provide the same features as full-fl
 I wrote it to take care of the boring stuff of markdown syntax.
 Anyone willing to write a back-end with a different Markdown flavour just needs to concentrate of the differences between the original syntax.
 #+end_quote
+
+* Contributing
+
+The git repository for ox-md-title.el is hosted on [[https://codeberg.org/jkreeftmeijer/ox-md-title.el][Codeberg]], and mirrored on [[https://github.com/jeffkreeftmeijer/ox-md-title.el][GitHub]].
+Contributions are welcome via either platform.
+
+** Set up git remotes                                              :noexport:
+
+Since ox-md-title.el is mirrored to GitHub, it uses multiple push remotes.
+Commits pushed to the main branch should be mirrored.
+A script is included in =scripts/remotes= to automate setting up these remotes after pulling:
+
+#+headers: :shebang #!/bin/sh
+#+headers: :tangle scripts/remotes
+#+begin_src shell
+   git remote set-url --delete --push origin https://codeberg.org/jkreeftmeijer/ox-md-title.el.git 2> /dev/null
+   git remote set-url --delete --push origin https://github.com/jeffkreeftmeijer/ox-md-title.el.git 2> /dev/null
+   git remote set-url --add --push origin https://codeberg.org/jkreeftmeijer/ox-md-title.el.git
+   git remote set-url --add --push origin https://github.com/jeffkreeftmeijer/ox-md-title.el.git
+   git remote show origin
+#+end_src
+
+#+RESULTS:
+
+To set up the git remotes, run the script:
+
+#+begin_src shell
+  ./scripts/remotes
+#+end_src
+
+#+RESULTS:
+
+** Tests
+
+Regression tests are written with [[https://www.gnu.org/software/emacs/manual/html_mono/ert.html][ERT]] and included in =test.el=.
+To run the tests in batch mode:
+
+#+begin_src shell
+  emacs -batch -l ert -l test.el -f ert-run-tests-batch-and-exit
+#+end_src
+
+#+RESULTS:
