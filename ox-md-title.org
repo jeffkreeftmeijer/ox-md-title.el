@@ -257,6 +257,27 @@ To set up the git remotes, run the script:
 :   Local ref configured for 'git push':
 :     main pushes to main (fast-forwardable)
 
+** Generate README                                                 :noexport:
+
+The =README.md= file is generated from =ox-md-title.org= with an included script named =scripts/readme=:
+
+#+headers: :shebang #!/bin/sh
+#+headers: :tangle scripts/readme
+#+headers: :eval no
+#+begin_src shell
+  emacs --batch ox-md-title.org --load scripts/readme.el/readme.el --eval "(readme/to-markdown \"README.md\")"
+#+end_src
+
+To generate the README, run the script:
+
+#+headers: :exports both
+#+headers: :results scalar
+#+begin_src shell
+  ./scripts/readme
+#+end_src
+
+#+RESULTS:
+
 ** Tests
 
 Regression tests are written with [[https://www.gnu.org/software/emacs/manual/html_mono/ert.html][ERT]] and included in =test.el=.
