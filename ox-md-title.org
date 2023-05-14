@@ -6,7 +6,7 @@
 #+date: 2023-04-24
 #+options: toc:nil
 
-[[https://github.com/jeffkreeftmeijer/ox-md-title.el][Ox-md-title.el]] adds document titles to Markdown files generated with ox-md and derivatives.
+Ox-md-title.el adds document titles to Markdown files generated with ox-md and derivatives.
 
 * Introduction
 
