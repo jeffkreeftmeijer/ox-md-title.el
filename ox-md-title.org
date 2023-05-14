@@ -225,23 +225,37 @@ A script is included in =scripts/remotes= to automate setting up these remotes a
 
 #+headers: :shebang #!/bin/sh
 #+headers: :tangle scripts/remotes
+#+headers: :eval no
 #+begin_src shell
-   git remote set-url --delete --push origin https://codeberg.org/jkreeftmeijer/ox-md-title.el.git 2> /dev/null
-   git remote set-url --delete --push origin https://github.com/jeffkreeftmeijer/ox-md-title.el.git 2> /dev/null
-   git remote set-url --add --push origin https://codeberg.org/jkreeftmeijer/ox-md-title.el.git
-   git remote set-url --add --push origin https://github.com/jeffkreeftmeijer/ox-md-title.el.git
-   git remote show origin
-#+end_src
+  for i in \
+    "https://codeberg.org/jkreeftmeijer/ox-md-title.el.git" \
+    "https://github.com/jeffkreeftmeijer/ox-md-title.el.git"
+  do
+    git remote set-url --delete --push origin $i 2> /dev/null
+    git remote set-url --add --push origin $i
+  done
 
-#+RESULTS:
+  git remote show origin
+#+end_src
 
 To set up the git remotes, run the script:
 
+#+headers: :exports both
+#+headers: :results scalar
 #+begin_src shell
   ./scripts/remotes
 #+end_src
 
 #+RESULTS:
+: * remote origin
+:   Fetch URL: https://codeberg.org/jkreeftmeijer/ox-md-title.el.git
+:   Push  URL: https://codeberg.org/jkreeftmeijer/ox-md-title.el.git
+:   Push  URL: https://github.com/jeffkreeftmeijer/ox-md-title.el.git
+:   HEAD branch: main
+:   Remote branch:
+:     main new (next fetch will store in remotes/origin)
+:   Local ref configured for 'git push':
+:     main pushes to main (fast-forwardable)
 
 ** Tests
 
