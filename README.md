@@ -1,7 +1,7 @@
 
 # ox-md-title: Document titles for ox-md.el
 
-[Ox-md-title.el](https://github.com/jeffkreeftmeijer/ox-md-title.el) adds document titles to Markdown files generated with ox-md and derivatives.
+Ox-md-title.el adds document titles to Markdown files generated with ox-md and derivatives.
 
 
 ## Introduction
@@ -18,7 +18,7 @@ Markdown doesn't have an equivalent to Org's titles. Instead, it's common to add
 #+date: 2023-04-24
 #+options: toc:nil
 
-[[https://github.com/jeffkreeftmeijer/ox-md-title.el][Ox-md-title.el]] adds document titles to Markdown files generated with ox-md and derivatives.
+Ox-md-title.el adds document titles to Markdown files generated with ox-md and derivatives.
 
 * Introduction
 ```
@@ -104,14 +104,14 @@ Finally, the added functions are added as advice:
 ```
 
 
-## Usage
+## Installation and usage
 
 Ox-md-title is currently not available through any of the package registries. Instead, install it from the repository direcly. Install the package with [use-package](https://github.com/jwiegley/use-package) and [straight.el](https://github.com/radian-software/straight.el), and enable it by calling `org-md-title-add`:
 
 ```emacs-lisp
 (use-package ox-md-title
   :straight
-  (ox-md-title :type git :host github :repo "jeffkreeftmeijer/ox-md-title.el")
+  (ox-md-title :type git :host codeberg :repo "jkreeftmeijer/ox-md-title.el")
   :config
   (org-md-title-add))
 ```
@@ -128,6 +128,20 @@ After calling `org-md-title-add`, set thte `org-md-title` variable to add docume
 ```emacs-lisp
 (let ((org-md-title t))
   (org-markdown-export-to-markdown))
+```
+
+
+## Contributing
+
+The git repository for ox-md-title.el is hosted on [Codeberg](https://codeberg.org/jkreeftmeijer/ox-md-title.el), and mirrored on [GitHub](https://github.com/jeffkreeftmeijer/ox-md-title.el). Contributions are welcome via either platform.
+
+
+### Tests
+
+Regression tests are written with [ERT](https://www.gnu.org/software/emacs/manual/html_mono/ert.html) and included in `test.el`. To run the tests in batch mode:
+
+```shell
+emacs -batch -l ert -l test.el -f ert-run-tests-batch-and-exit
 ```
 
 ## Footnotes
