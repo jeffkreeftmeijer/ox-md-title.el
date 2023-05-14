@@ -1,0 +1,10 @@
+#!/bin/sh
+for i in \
+  "https://codeberg.org/jkreeftmeijer/ox-md-title.el.git" \
+  "https://github.com/jeffkreeftmeijer/ox-md-title.el.git"
+do
+  git remote set-url --delete --push origin $i 2> /dev/null
+  git remote set-url --add --push origin $i
+done
+
+git remote show origin
