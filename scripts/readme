@@ -1,0 +1,2 @@
+#!/bin/sh
+emacs --batch ox-md-title.org --load scripts/readme.el/readme.el --eval "(readme/to-markdown \"README.md\")"
