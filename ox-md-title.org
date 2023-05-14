@@ -184,7 +184,7 @@ Install the package with [[https://github.com/jwiegley/use-package][use-package]
 #+begin_src emacs-lisp
   (use-package ox-md-title
     :straight
-    (ox-md-title :type git :host github :repo "jeffkreeftmeijer/ox-md-title.el")
+    (ox-md-title :type git :host codeberg :repo "jkreeftmeijer/ox-md-title.el")
     :config
     (org-md-title-add))
 #+end_src
