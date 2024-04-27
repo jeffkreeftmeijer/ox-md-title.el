@@ -66,3 +66,19 @@
 
     (should-not (string-match-p "# Title" buffer))
     (should (string-match-p "^# Sub-headline" buffer))))
+
+(ert-deftest toc-test ()
+  (switch-to-buffer "*ox-md-title-test*")
+  (erase-buffer)
+  (insert "#+title: Title\n#+options: toc:2\n* Sub-headline")
+
+  (let ((org-md-title t))
+    (with-org-md-title #'org-md-export-as-markdown))
+
+  (let ((buffer (with-current-buffer
+		    "*Org MD Export*"
+		  (buffer-string))))
+
+    (should (string-match-p "^# Title" buffer))
+    (should (string-match-p "\[Sub-headline\]" buffer))
+    (should (string-match-p "^## Sub-headline" buffer))))
