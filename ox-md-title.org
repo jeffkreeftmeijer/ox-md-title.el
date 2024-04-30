@@ -119,15 +119,31 @@ The title is built by calling out to =org-md--headline-title= with the headline 
 
 Because a new title is prepended to the document, any already-existing headlines need their levels bumped up.
 The second advice intercepts calls to =org-export-get-relative-level=, which is the internal function the export backends use to determine the level for the current headline.
-It increments the headline level by one if =org-md-title= is enabled and if the current document has a title set:
+It increments the headline level by one if =org-md-title= is enabled[fn:h2]:
+
+[fn:h2] When the document has a title set, it's used as the document's top level, and other headlines are pushed down one level:
+
+#+begin_src markdown
+  # Title
+  ## Headline 1
+  ### Headline 2
+#+end_src
+
+If the document does not have a title, but ~org-md-title~ is enabled, the headlines are still pushed down:
+
+#+begin_src markdown
+  ## Headline 1
+  ### Headline 2
+#+end_src
+
+Bumping all headline levels up gives the same behavior as in Org's HTML exporter, which uses a src_html[:exports code]{<h1>} tag for the title, and a src_html[:exports code]{<h2>} tag for the top level headline, even if the source document does not have a title set.
+
 
 #+name: headline
 #+begin_src emacs-lisp
 (defun org-md-title--advise-level (orig-fun headline info)
   (+ (funcall orig-fun headline info)
-     (if (and org-md-title (plist-get info :title))
-	 1
-       0)))
+     (if org-md-title 1 0)))
 #+end_src
 
 Finally, the added functions are added as advice:

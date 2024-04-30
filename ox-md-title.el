@@ -41,9 +41,7 @@
 
 (defun org-md-title--advise-level (orig-fun headline info)
   (+ (funcall orig-fun headline info)
-     (if (and org-md-title (plist-get info :title))
-	 1
-       0)))
+     (if org-md-title 1 0)))
 
 (defun org-md-title-add ()
   (advice-add 'org-export-get-relative-level :around #'org-md-title--advise-level)
