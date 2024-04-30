@@ -248,8 +248,8 @@ A script is included in =scripts/remotes= to automate setting up these remotes a
 #+headers: :eval no
 #+begin_src shell
   for remote in \
-    "https://codeberg.org/jkreeftmeijer/ox-md-title.el.git" \
-    "https://github.com/jeffkreeftmeijer/ox-md-title.el.git"
+    "git@codeberg.org:jkreeftmeijer/ox-md-title.el.git" \
+    "git@github.com:jeffkreeftmeijer/ox-md-title.el.git"
   do
     git remote set-url --delete --push origin $remote 2> /dev/null
     git remote set-url --add --push origin $remote
