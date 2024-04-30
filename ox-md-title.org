@@ -23,7 +23,7 @@ For example, the current document has export settings, including a title:
 
 #+include: "ox-md-title.org" src org :lines "4-13"
 
-Exporting with =org-md-export-as-markdown= produces a Markdown document without a title headline:
+Exporting with src_emacs-lisp[:exports code]{org-md-export-as-markdown} produces a Markdown document without a title headline:
 
 #+headers: :exports results
 #+headers: :wrap src markdown
@@ -79,7 +79,7 @@ Once enabled, it adds the document title in front of the exported document, and 
 * Implementation
 
 Ox-md-title is disabled by default, even after requiring and enabling the library.
-It only adds titles to Markdown export when =org-md-title= is non-nil:
+It only adds titles to Markdown export when src_emacs-lisp[:exports code]{org-md-title} is non-nil:
 
 #+name: option
 #+begin_src emacs-lisp
@@ -99,8 +99,8 @@ It only adds titles to Markdown export when =org-md-title= is non-nil:
 #+end_src
 
 The package works by advising two functions.
-First, it advises =org-md-template= by prepending the document title.
-The title is built by calling out to =org-md--headline-title= with the headline style and title extracted from the =info= variable:
+First, it advises src_emacs-lisp[:exports code]{org-md-template} by prepending the document title.
+The title is built by calling out to src_emacs-lisp[:exports code]{org-md--headline-title} with the headline style and title extracted from the src_emacs-lisp[:exports code]{info} variable:
 
 #+name: template
 #+begin_src emacs-lisp
@@ -118,7 +118,7 @@ The title is built by calling out to =org-md--headline-title= with the headline 
 #+end_src
 
 Because a new title is prepended to the document, any already-existing headlines need their levels bumped up.
-The second advice intercepts calls to =org-md--headline-title=, which is the internal function the Markdown exporter uses to generate headlines in the selected headline style.
+The second advice intercepts calls to src_emacs-lisp[:exports code]{org-md--headline-title}, which is the internal function the Markdown exporter uses to generate headlines in the selected headline style.
 
 Whenever that function is called, the advise kicks in and increments the second argument with 1. if src_emacs-lisp[:exports code]{org-md-title} is enabled[fn:h2]:
 This means that whenever the src_emacs-lisp[:exports code]{org-md--headline-title} is called with a headline level of 1, it actually receives a 2.
@@ -199,7 +199,7 @@ Finally, the added functions are added as advice:
 
 Ox-md-title is currently not available through any of the package registries.
 Instead, install it from the repository direcly.
-Install the package with [[https://github.com/jwiegley/use-package][use-package]] and [[https://github.com/radian-software/straight.el][straight.el]], and enable it by calling =org-md-title-add=:
+Install the package with [[https://github.com/jwiegley/use-package][use-package]] and [[https://github.com/radian-software/straight.el][straight.el]], and enable it by calling src_emacs-lisp[:exports code]{org-md-title-add}:
 
 #+begin_src emacs-lisp
   (use-package ox-md-title
@@ -216,7 +216,7 @@ Alternatively, download =ox-md-title.el= and require it manually:
   (org-md-title-add)
 #+end_src
 
-After calling =org-md-title-add=, set thte =org-md-title= variable to add document titles when exporting with ox-md:
+After calling src_emacs-lisp[:exports code]{org-md-title-add}, set thte src_emacs-lisp[:exports code]{org-md-title} variable to add document titles when exporting with ox-md:
 
 #+begin_src emacs-lisp
   (let ((org-md-title t))
