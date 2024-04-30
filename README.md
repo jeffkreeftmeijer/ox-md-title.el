@@ -75,31 +75,32 @@ The package works by advising two functions. First, it advises `org-md-template`
 	 (subtitle (plist-get info :subtitle)))
     (concat
      (when (and org-md-title title)
-       (org-md--headline-title style 1 (org-export-data title info) nil))
+       (org-md--headline-title style 0 (org-export-data title info) nil))
      (when (and org-md-title subtitle)
-       (org-md--headline-title style 2 (org-export-data subtitle info) nil))
+       (org-md--headline-title style 1 (org-export-data subtitle info) nil))
      (apply orig-fun args))))
 ```
 
-Because a new title is prepended to the document, any already-existing headlines need their levels bumped up. The second advice intercepts calls to `org-export-get-relative-level`, which is the internal function the export backends use to determine the level for the current headline. It increments the headline level by one if `org-md-title` is enabled and if the current document has a title set:
+Because a new title is prepended to the document, any already-existing headlines need their levels bumped up. The second advice intercepts calls to `org-md--headline-title`, which is the internal function the Markdown exporter uses to generate headlines in the selected headline style.
+
+Whenever that function is called, the advise kicks in and increments the second argument with 1. if `org-md-title` is enabled<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>: This means that whenever the `org-md--headline-title` is called with a headline level of 1, it actually receives a 2. The previously defined advise in `org-md-title--advise-template` already accounts for that by using 0 and 1, instead of 1 and 2, for its title and subtitle levels.
 
 ```emacs-lisp
-(defun org-md-title--advise-level (orig-fun headline info)
-  (+ (funcall orig-fun headline info)
-     (if (and org-md-title (plist-get info :title))
-	 1
-       0)))
+(defun org-md-title--advise-headline-title (args)
+  (when org-md-title
+      (setf (nth 1 args) (+ (nth 1 args) 1)))
+    args)
 ```
 
 Finally, the added functions are added as advice:
 
 ```emacs-lisp
 (defun org-md-title-add ()
-  (advice-add 'org-export-get-relative-level :around #'org-md-title--advise-level)
+  (advice-add 'org-md--headline-title :filter-args #'org-md-title--advise-headline-title)
   (advice-add 'org-md-template :around #'org-md-title--advise-template))
 
 (defun org-md-title-remove ()
-  (advice-remove 'org-export-get-relative-level #'org-md-title--advise-level)
+  (advice-remove 'org-md--headline-title #'org-md-title--advise-headline-title)
   (advice-remove 'org-md-template #'org-md-title--advise-template))
 ```
 
@@ -149,3 +150,20 @@ emacs -batch -l ert -l test.el -f ert-run-tests-batch-and-exit
 <sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> A [patch to add titles](https://lists.gnu.org/archive/html/emacs-orgmode/2017-08/msg00553.html) was rejected to keep ox-md compatible with standard Markdown. Instead of adding support for titles in the main implementation, it's suggested that features like this should be implemented in more specific backends:
 
 > The point of "md" export back-end is not to provide the same features as full-fledged ones like "latex" or "html". I wrote it to take care of the boring stuff of markdown syntax. Anyone willing to write a back-end with a different Markdown flavour just needs to concentrate of the differences between the original syntax.
+
+<sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> When the document has a title set, it's used as the document's top level, and other headlines are pushed down one level:
+
+```markdown
+# Title
+## Headline 1
+### Headline 2
+```
+
+If the document does not have a title, but `org-md-title` is enabled, the headlines are still pushed down:
+
+```markdown
+## Headline 1
+### Headline 2
+```
+
+Bumping all headline levels up gives the same behavior as in Org's HTML exporter, which uses a `<h1>` tag for the title, and a `<h2>` tag for the top level headline, even if the source document does not have a title set.
