@@ -1,7 +1,7 @@
 ;;; ox-md-title.el --- Document titles for ox-md.el
 
 ;; Author: Jeff Kreeftmeijer <jeff@kreeft.me>
-;; Version: 0.1
+;; Version: 0.2.0
 ;; URL: https://jeffkreeftmeijer.com/ox-md-title
 
 ;;; Commentary:
