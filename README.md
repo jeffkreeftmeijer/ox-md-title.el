@@ -26,7 +26,7 @@ Ox-md-title.el adds document titles to Markdown files generated with ox-md and d
 Exporting with `org-md-export-as-markdown` produces a Markdown document without a title headline:
 
 ```markdown
-[Ox-md-title.el](https://github.com/jeffkreeftmeijer/ox-md-title.el) adds document titles to Markdown files generated with ox-md and derivatives.
+Ox-md-title.el adds document titles to Markdown files generated with ox-md and derivatives.
 
 
 # Introduction
@@ -38,7 +38,7 @@ Ox-md-title deviates from the Markdown standard and adds document titles to beha
 
 # ox-md-title: Document titles for ox-md.el
 
-[Ox-md-title.el](https://github.com/jeffkreeftmeijer/ox-md-title.el) adds document titles to Markdown files generated with ox-md and derivatives.
+Ox-md-title.el adds document titles to Markdown files generated with ox-md and derivatives.
 
 
 ## Introduction
@@ -47,7 +47,7 @@ Ox-md-title deviates from the Markdown standard and adds document titles to beha
 
 ## Implementation
 
-Ox-md-title is disabled by default, even after requiring and enabling the library. It only adds titles to Markdown export when `org-md-title` is non-nil:
+The package works by advising two functions. First, it advises `org-md-template` by prepending the document title if `org-export-with-title` is non-nil. The title is built by calling out to `org-md--headline-title` with the headline style and title extracted from the `info` variable:
 
 ```emacs-lisp
 (defgroup org-export-md-title nil
@@ -57,39 +57,30 @@ Ox-md-title is disabled by default, even after requiring and enabling the librar
   :version "24.4"
   :package-version '(Org . "8.0"))
 
-(defcustom org-md-title nil
-  "Non-nil means to include the title in the exported document."
-  :group 'org-export-md-title
-  :version "24.4"
-  :package-version '(Org . "8.0")
-  :type 'boolean)
-```
-
-The package works by advising two functions. First, it advises `org-md-template` by prepending the document title. The title is built by calling out to `org-md--headline-title` with the headline style and title extracted from the `info` variable:
-
-```emacs-lisp
 (defun org-md-title--advise-template (orig-fun &rest args)
-  (let* ((info (nth 1 args))
-	 (style (plist-get info :md-headline-style))
-	 (title (plist-get info :title))
-	 (subtitle (plist-get info :subtitle)))
-    (concat
-     (when (and org-md-title title)
-       (org-md--headline-title style 0 (org-export-data title info) nil))
-     (when (and org-md-title subtitle)
-       (org-md--headline-title style 1 (org-export-data subtitle info) nil))
-     (apply orig-fun args))))
+  (let ((info (nth 1 args))
+	(orig-result (apply orig-fun args)))
+    (if (plist-get info :with-title)
+	(let ((style (plist-get info :md-headline-style))
+	      (title (plist-get info :title))
+	      (subtitle (plist-get info :subtitle)))
+	  (concat
+	   (when title
+	     (org-md--headline-title style 0 (org-export-data title info) nil))
+	   (when subtitle
+	     (org-md--headline-title style 1 (org-export-data subtitle info) nil))
+	   orig-result))
+      orig-result)))
 ```
 
 Because a new title is prepended to the document, any already-existing headlines need their levels bumped up. The second advice intercepts calls to `org-md--headline-title`, which is the internal function the Markdown exporter uses to generate headlines in the selected headline style.
 
-Whenever that function is called, the advise kicks in and increments the second argument with 1. if `org-md-title` is enabled<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>: This means that whenever the `org-md--headline-title` is called with a headline level of 1, it actually receives a 2. The previously defined advise in `org-md-title--advise-template` already accounts for that by using 0 and 1, instead of 1 and 2, for its title and subtitle levels.
+Whenever that function is called, the advise kicks in and increments the second argument with 1<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>: This means that whenever the `org-md--headline-title` is called with a headline level of 1, it actually receives a 2. The previously defined advise in `org-md-title--advise-template` already accounts for that by using 0 and 1, instead of 1 and 2, for its title and subtitle levels.
 
 ```emacs-lisp
 (defun org-md-title--advise-headline-title (args)
-  (when org-md-title
-      (setf (nth 1 args) (+ (nth 1 args) 1)))
-    args)
+  (setf (nth 1 args) (+ (nth 1 args) 1))
+  args)
 ```
 
 Finally, the added functions are added as advice:
@@ -124,7 +115,7 @@ Alternatively, download `ox-md-title.el` and require it manually:
 (org-md-title-add)
 ```
 
-After calling `org-md-title-add`, set thte `org-md-title` variable to add document titles when exporting with ox-md:
+After calling `org-md-title-add`, set the `org-md-title` variable to add document titles when exporting with ox-md:
 
 ```emacs-lisp
 (let ((org-md-title t))
@@ -134,7 +125,7 @@ After calling `org-md-title-add`, set thte `org-md-title` variable to add docume
 
 ## Contributing
 
-The git repository for ox-md-title.el is hosted on [Codeberg](https://codeberg.org/jkreeftmeijer/ox-md-title.el), and mirrored on [GitHub](https://github.com/jeffkreeftmeijer/ox-md-title.el). Contributions are welcome via either platform.
+The git repository for ox-md-title.el is hosted on [GitHub](https://github.com/jeffkreeftmeijer/ox-md-title.el) and [Codeberg](https://codeberg.org/jkreeftmeijer/ox-md-title.el). Contributions are welcome via either platform.
 
 
 ### Tests
@@ -159,7 +150,7 @@ emacs -batch -l ert -l test.el -f ert-run-tests-batch-and-exit
 ### Headline 2
 ```
 
-If the document does not have a title, but `org-md-title` is enabled, the headlines are still pushed down:
+If the document does not have a title, but `org-md-title`'s advice is added, the headlines are still pushed down:
 
 ```markdown
 ## Headline 1
