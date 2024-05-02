@@ -221,7 +221,7 @@ Anyone willing to write a back-end with a different Markdown flavour just needs 
 
 * Contributing
 
-The git repository for ox-md-title.el is hosted on [[https://codeberg.org/jkreeftmeijer/ox-md-title.el][Codeberg]], and mirrored on [[https://github.com/jeffkreeftmeijer/ox-md-title.el][GitHub]].
+The git repository for ox-md-title.el is hosted on [[https://github.com/jeffkreeftmeijer/ox-md-title.el][GitHub]] and [[https://codeberg.org/jkreeftmeijer/ox-md-title.el][Codeberg]].
 Contributions are welcome via either platform.
 
 ** Set up git remotes                                              :noexport:
