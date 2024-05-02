@@ -20,32 +20,24 @@
   :version "24.4"
   :package-version '(Org . "8.0"))
 
-(defcustom org-md-title nil
-  "Non-nil means to include the title in the exported document."
-  :group 'org-export-md-title
-  :version "24.4"
-  :package-version '(Org . "8.0")
-  :type 'boolean)
-
 (defun org-md-title--advise-template (orig-fun &rest args)
   (let ((info (nth 1 args))
         (orig-result (apply orig-fun args)))
-        (if (plist-get info :with-title)
-            (let ((style (plist-get info :md-headline-style))
-                  (title (plist-get info :title))
-                  (subtitle (plist-get info :subtitle)))
-              (concat
-               (when (and org-md-title title)
-                 (org-md--headline-title style 0 (org-export-data title info) nil))
-               (when (and org-md-title subtitle)
-                 (org-md--headline-title style 1 (org-export-data subtitle info) nil))
-               orig-result))
-          orig-result)))
+    (if (plist-get info :with-title)
+        (let ((style (plist-get info :md-headline-style))
+              (title (plist-get info :title))
+              (subtitle (plist-get info :subtitle)))
+          (concat
+           (when title
+             (org-md--headline-title style 0 (org-export-data title info) nil))
+           (when subtitle
+             (org-md--headline-title style 1 (org-export-data subtitle info) nil))
+           orig-result))
+      orig-result)))
 
 (defun org-md-title--advise-headline-title (args)
-  (when org-md-title
-      (setf (nth 1 args) (+ (nth 1 args) 1)))
-    args)
+  (setf (nth 1 args) (+ (nth 1 args) 1))
+  args)
 
 (defun org-md-title-add ()
   (advice-add 'org-md--headline-title :filter-args #'org-md-title--advise-headline-title)

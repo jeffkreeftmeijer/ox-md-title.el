@@ -11,8 +11,7 @@
   (erase-buffer)
   (insert "#+title: Title\n\n* Sub-headline")
 
-  (let ((org-md-title t))
-    (with-org-md-title #'org-md-export-as-markdown))
+  (with-org-md-title #'org-md-export-as-markdown)
 
   (let ((buffer (with-current-buffer
 		    "*Org MD Export*"
@@ -26,8 +25,7 @@
   (erase-buffer)
   (insert "#+title: Title\n#+subtitle: Subtitle")
 
-  (let ((org-md-title t))
-    (with-org-md-title #'org-md-export-as-markdown))
+  (with-org-md-title #'org-md-export-as-markdown)
 
   (let ((buffer (with-current-buffer
 		    "*Org MD Export*"
@@ -36,28 +34,12 @@
     (should (string-match-p "^# Title" buffer))
     (should (string-match-p "^## Subtitle" buffer))))
 
-(ert-deftest title-disabled-test ()
-  (switch-to-buffer "*ox-md-title-test*")
-  (erase-buffer)
-  (insert "#+title: Title\n\n* Sub-headline")
-
-  (let ((org-md-title nil))
-    (with-org-md-title #'org-md-export-as-markdown))
-
-  (let ((buffer (with-current-buffer
-		    "*Org MD Export*"
-		  (buffer-string))))
-
-    (should-not (string-match-p "# Title" buffer))
-    (should (string-match-p "^# Sub-headline" buffer))))
-
 (ert-deftest toc-test ()
   (switch-to-buffer "*ox-md-title-test*")
   (erase-buffer)
   (insert "#+title: Title\n#+options: toc:2\n* Sub-headline")
 
-  (let ((org-md-title t))
-    (with-org-md-title #'org-md-export-as-markdown))
+  (with-org-md-title #'org-md-export-as-markdown)
 
   (let ((buffer (with-current-buffer
 		    "*Org MD Export*"
@@ -72,8 +54,7 @@
   (erase-buffer)
   (insert "#+title: Title\n\n* Sub-headline")
 
-  (let ((org-md-title t)
-        (org-export-with-title nil))
+  (let ((org-export-with-title nil))
     (with-org-md-title #'org-md-export-as-markdown))
 
   (let ((buffer (with-current-buffer
