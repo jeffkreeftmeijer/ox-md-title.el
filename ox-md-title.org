@@ -32,14 +32,14 @@ Exporting with src_emacs-lisp[:exports code]{org-md-export-as-markdown} produces
   (find-file "ox-md-title.org")
   (org-md-export-as-markdown)
 
-  (let ((contents (buffer-substring 1 163)))
+  (let ((contents (buffer-substring 1 110)))
     (kill-buffer)
     contents)
 #+end_src
 
-#+RESULTS[895dc372a4698a04047a1d2c27329f3c7e98078d]:
+#+RESULTS[7a0751d93d8b70bf507e82a0042a0bdd7edfa666]:
 #+begin_src markdown
-[Ox-md-title.el](https://github.com/jeffkreeftmeijer/ox-md-title.el) adds document titles to Markdown files generated with ox-md and derivatives.
+Ox-md-title.el adds document titles to Markdown files generated with ox-md and derivatives.
 
 
 # Introduction
@@ -52,7 +52,7 @@ Once enabled, it adds the document title in front of the exported document, and 
 #+headers: :wrap src markdown
 #+headers: :cache yes
 #+begin_src emacs-lisp
-  (require 'ox-md-title)
+  (load-file "ox-md-title.el")
   (org-md-title-add)
 
   (find-file "ox-md-title.org")
@@ -60,17 +60,17 @@ Once enabled, it adds the document title in front of the exported document, and 
   (let ((org-md-title t))
     (org-md-export-as-markdown))
 
-  (let ((contents (buffer-substring 1 210)))
+  (let ((contents (buffer-substring 1 157)))
     (kill-buffer)
     contents)
 #+end_src
 
-#+RESULTS[aafde1d92af9a0c874e5e96444bc7817d50d061a]:
+#+RESULTS[4395bbb1cb939aa976b870f863d7dc64d501d249]:
 #+begin_src markdown
 
 # ox-md-title: Document titles for ox-md.el
 
-[Ox-md-title.el](https://github.com/jeffkreeftmeijer/ox-md-title.el) adds document titles to Markdown files generated with ox-md and derivatives.
+Ox-md-title.el adds document titles to Markdown files generated with ox-md and derivatives.
 
 
 ## Introduction
