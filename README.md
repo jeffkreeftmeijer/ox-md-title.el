@@ -10,7 +10,7 @@ Org documents often have their document titles set in a `+#title` export setting
 
 Markdown doesn't have an equivalent to Org's titles. Instead, it's common to add a top-level headline to the start of the document.
 
-[Ox-md](https://git.savannah.gnu.org/cgit/emacs/org-mode.git/tree/lisp/ox-md.el), the Markdown exporter shipped with Org mode, adheres to Markdown's lack of explicit titles.<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> Even though Org documents can have titles through the title export setting, ox-md produces Markdown files with the titles omitted. For example, the current document has export settings, including a title:
+[Ox-md](https://git.savannah.gnu.org/cgit/emacs/org-mode.git/tree/lisp/ox-md.el), the Markdown exporter shipped with Org mode, adheres to Markdown's lack of explicit titles.<sup><a id="fnr.patch" class="footref" href="#fn.patch" role="doc-backlink">1</a></sup> Even though Org documents can have titles through the title export setting, ox-md produces Markdown files with the titles omitted. For example, the current document has export settings, including a title:
 
 ```org
 #+title: ox-md-title: Document titles for ox-md.el
@@ -59,23 +59,23 @@ The package works by advising two functions. First, it advises `org-md-template`
 
 (defun org-md-title--advise-template (orig-fun &rest args)
   (let ((info (nth 1 args))
-	(orig-result (apply orig-fun args)))
+        (orig-result (apply orig-fun args)))
     (if (plist-get info :with-title)
-	(let ((style (plist-get info :md-headline-style))
-	      (title (plist-get info :title))
-	      (subtitle (plist-get info :subtitle)))
-	  (concat
-	   (when title
-	     (org-md--headline-title style 0 (org-export-data title info) nil))
-	   (when subtitle
-	     (org-md--headline-title style 1 (org-export-data subtitle info) nil))
-	   orig-result))
+        (let ((style (plist-get info :md-headline-style))
+              (title (plist-get info :title))
+              (subtitle (plist-get info :subtitle)))
+          (concat
+           (when title
+             (org-md--headline-title style 0 (org-export-data title info) nil))
+           (when subtitle
+             (org-md--headline-title style 1 (org-export-data subtitle info) nil))
+           orig-result))
       orig-result)))
 ```
 
 Because a new title is prepended to the document, any already-existing headlines need their levels bumped up. The second advice intercepts calls to `org-md--headline-title`, which is the internal function the Markdown exporter uses to generate headlines in the selected headline style.
 
-Whenever that function is called, the advise kicks in and increments the second argument with 1<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>: This means that whenever the `org-md--headline-title` is called with a headline level of 1, it actually receives a 2. The previously defined advise in `org-md-title--advise-template` already accounts for that by using 0 and 1, instead of 1 and 2, for its title and subtitle levels.
+Whenever that function is called, the advise kicks in and increments the second argument with 1<sup><a id="fnr.h2" class="footref" href="#fn.h2" role="doc-backlink">2</a></sup>: This means that whenever the `org-md--headline-title` is called with a headline level of 1, it actually receives a 2. The previously defined advise in `org-md-title--advise-template` already accounts for that by using 0 and 1, instead of 1 and 2, for its title and subtitle levels.
 
 ```emacs-lisp
 (defun org-md-title--advise-headline-title (args)
@@ -98,12 +98,11 @@ Finally, the added functions are added as advice:
 
 ## Installation and usage
 
-Ox-md-title is currently not available through any of the package registries. Instead, install it from the repository direcly. Install the package with [use-package](https://github.com/jwiegley/use-package) and [straight.el](https://github.com/radian-software/straight.el), and enable it by calling `org-md-title-add`:
+Ox-md-title is currently not available through any of the package registries. Instead, install it from the repository direcly. Install the package with [use-package](https://github.com/jwiegley/use-package), and enable it by calling `org-md-title-add`:
 
 ```emacs-lisp
 (use-package ox-md-title
-  :straight
-  (ox-md-title :type git :host codeberg :repo "jkreeftmeijer/ox-md-title.el")
+  :vc (:url "https://github.com/jeffkreeftmeijer/ox-md-title.el.git")
   :config
   (org-md-title-add))
 ```

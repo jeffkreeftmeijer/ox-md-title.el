@@ -186,12 +186,11 @@ Finally, the added functions are added as advice:
 
 Ox-md-title is currently not available through any of the package registries.
 Instead, install it from the repository direcly.
-Install the package with [[https://github.com/jwiegley/use-package][use-package]] and [[https://github.com/radian-software/straight.el][straight.el]], and enable it by calling src_emacs-lisp[:exports code]{org-md-title-add}:
+Install the package with [[https://github.com/jwiegley/use-package][use-package]], and enable it by calling src_emacs-lisp[:exports code]{org-md-title-add}:
 
 #+begin_src emacs-lisp
   (use-package ox-md-title
-    :straight
-    (ox-md-title :type git :host codeberg :repo "jkreeftmeijer/ox-md-title.el")
+    :vc (:url "https://github.com/jeffkreeftmeijer/ox-md-title.el.git")
     :config
     (org-md-title-add))
 #+end_src
