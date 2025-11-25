@@ -13,6 +13,7 @@ Markdown doesn't have an equivalent to Org's titles. Instead, it's common to add
 [Ox-md](https://git.savannah.gnu.org/cgit/emacs/org-mode.git/tree/lisp/ox-md.el), the Markdown exporter shipped with Org mode, adheres to Markdown's lack of explicit titles.<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> Even though Org documents can have titles through the title export setting, ox-md produces Markdown files with the titles omitted. For example, the current document has export settings, including a title:
 
 ```org
+:END:
 #+title: ox-md-title: Document titles for ox-md.el
 #+author: Jeff Kreeftmeijer
 #+date: 2023-04-24
